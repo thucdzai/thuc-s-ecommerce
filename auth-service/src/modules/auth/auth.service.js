@@ -1,9 +1,13 @@
+const crypto = require('crypto');
 const AppError = require('../../utils/AppError');
 const password = require('../../utils/password');
 const jwt = require('../../utils/jwt');
 const authRepository = require('./auth.repository');
 const redis = require('../../config/redis');
 const authEvents = require('../../events/authEvents.publisher');
+
+const RESET_TOKEN_TTL_MS = 15 * 60 * 1000;
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
 
 // ---------------------------------------------------------------------------
 // Chống spam đăng nhập sai (brute-force/dò mật khẩu) bằng Redis — đây là use-case kinh điển
@@ -154,4 +158,32 @@ async function logout(refreshTokenValue) {
     await authRepository.revokeRefreshToken(tokenHash);
 }
 
-module.exports = { register, login, refresh, logout, toPublicUser };
+async function forgotPassword({ email }) {
+    const user = await authRepository.findUserByEmail(email);
+    // Không tiết lộ email có tồn tại hay không — luôn trả về thành công
+    if (!user || user.status === 'banned') return;
+
+    const plainToken = crypto.randomBytes(32).toString('hex');
+    const tokenHash = crypto.createHash('sha256').update(plainToken).digest('hex');
+    const expiresAt = new Date(Date.now() + RESET_TOKEN_TTL_MS);
+
+    await authRepository.createResetToken({ userId: user.id, tokenHash, expiresAt });
+
+    const resetUrl = `${FRONTEND_URL}/reset-password?token=${plainToken}`;
+    await authEvents.publishPasswordResetRequested({ email: user.email, fullName: user.full_name, resetUrl });
+}
+
+async function resetPassword({ token, newPassword: plainPassword }) {
+    const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
+    const record = await authRepository.findValidResetToken(tokenHash);
+    if (!record) {
+        throw new AppError(400, 'Link đặt lại mật khẩu không hợp lệ hoặc đã hết hạn');
+    }
+
+    const passwordHash = await password.hash(plainPassword);
+    await authRepository.updatePasswordById(record.user_id, passwordHash);
+    await authRepository.markResetTokenUsed(record.id);
+    await authRepository.revokeAllRefreshTokens(record.user_id);
+}
+
+module.exports = { register, login, refresh, logout, toPublicUser, forgotPassword, resetPassword };

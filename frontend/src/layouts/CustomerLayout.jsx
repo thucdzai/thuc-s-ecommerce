@@ -206,7 +206,7 @@ export function CustomerLayout() {
 
       <footer className="border-t py-8 text-sm text-muted-foreground">
         <div className="mx-auto max-w-7xl px-4">
-          <p>© {new Date().getFullYear()} TTTN Shop — Đồ án tốt nghiệp thương mại điện tử microservices.</p>
+          <p>© {new Date().getFullYear()} TTTN Shop</p>
         </div>
       </footer>
     </div>

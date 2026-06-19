@@ -9,4 +9,8 @@ async function publishUserRegistered({ userId, email, fullName }) {
     await kafka.publishEvent(AUTH_EVENTS, 'user.registered', { userId, email, fullName }, String(userId));
 }
 
-module.exports = { publishUserRegistered };
+async function publishPasswordResetRequested({ email, fullName, resetUrl }) {
+    await kafka.publishEvent(AUTH_EVENTS, 'user.password_reset_requested', { email, fullName, resetUrl }, email);
+}
+
+module.exports = { publishUserRegistered, publishPasswordResetRequested };

@@ -15,4 +15,13 @@ const refreshToken = Joi.object({
     refreshToken: Joi.string().required(),
 });
 
-module.exports = { register, login, refreshToken };
+const forgotPassword = Joi.object({
+    email: Joi.string().trim().lowercase().email().required(),
+});
+
+const resetPassword = Joi.object({
+    token: Joi.string().required(),
+    newPassword: Joi.string().min(6).max(100).required(),
+});
+
+module.exports = { register, login, refreshToken, forgotPassword, resetPassword };

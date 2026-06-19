@@ -66,6 +66,34 @@ async function revokeRefreshToken(tokenHash) {
     await db.execute('UPDATE refresh_tokens SET revoked_at = NOW() WHERE token_hash = ?', [tokenHash]);
 }
 
+async function createResetToken({ userId, tokenHash, expiresAt }) {
+    await db.execute('DELETE FROM password_reset_tokens WHERE user_id = ? AND used_at IS NULL', [userId]);
+    await db.execute(
+        'INSERT INTO password_reset_tokens (user_id, token_hash, expires_at) VALUES (?, ?, ?)',
+        [userId, tokenHash, expiresAt]
+    );
+}
+
+async function findValidResetToken(tokenHash) {
+    const [rows] = await db.execute(
+        'SELECT * FROM password_reset_tokens WHERE token_hash = ? AND used_at IS NULL AND expires_at > NOW() LIMIT 1',
+        [tokenHash]
+    );
+    return rows[0] || null;
+}
+
+async function markResetTokenUsed(id) {
+    await db.execute('UPDATE password_reset_tokens SET used_at = NOW() WHERE id = ?', [id]);
+}
+
+async function updatePasswordById(userId, passwordHash) {
+    await db.execute('UPDATE users SET password_hash = ? WHERE id = ?', [passwordHash, userId]);
+}
+
+async function revokeAllRefreshTokens(userId) {
+    await db.execute('UPDATE refresh_tokens SET revoked_at = NOW() WHERE user_id = ? AND revoked_at IS NULL', [userId]);
+}
+
 module.exports = {
     findUserByEmail,
     findUserById,
@@ -75,4 +103,9 @@ module.exports = {
     saveRefreshToken,
     findActiveRefreshToken,
     revokeRefreshToken,
+    createResetToken,
+    findValidResetToken,
+    markResetTokenUsed,
+    updatePasswordById,
+    revokeAllRefreshTokens,
 };

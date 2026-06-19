@@ -84,6 +84,22 @@ function shipmentStatusChanged({ orderCode, fullName, carrier, trackingCode, sta
     };
 }
 
+function passwordReset({ fullName, resetUrl }) {
+    return {
+        subject: 'Đặt lại mật khẩu TTTN Shop',
+        html: wrap('Đặt lại mật khẩu', `
+            <p>Xin chào <strong>${fullName}</strong>,</p>
+            <p>Chúng tôi nhận được yêu cầu đặt lại mật khẩu cho tài khoản của bạn.</p>
+            <p style="margin: 24px 0;">
+                <a href="${resetUrl}" style="background:#111827;color:#fff;padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:bold;">
+                    Đặt lại mật khẩu
+                </a>
+            </p>
+            <p style="font-size:13px;color:#6b7280;">Link có hiệu lực trong <strong>15 phút</strong>. Nếu bạn không yêu cầu, hãy bỏ qua email này.</p>
+        `),
+    };
+}
+
 module.exports = {
     welcome,
     orderCreated,
@@ -91,4 +107,5 @@ module.exports = {
     orderCompleted,
     paymentSucceeded,
     shipmentStatusChanged,
+    passwordReset,
 };

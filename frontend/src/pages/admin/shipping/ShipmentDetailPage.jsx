@@ -73,7 +73,7 @@ export default function AdminShipmentDetailPage() {
                   tone="primary"
                   label={SHIPMENT_STATUS_ACTION_LABEL[advanceTo] ?? SHIPMENT_STATUS_LABEL[advanceTo]}
                   dialogTitle={`Chuyển vận đơn sang "${SHIPMENT_STATUS_LABEL[advanceTo]}"?`}
-                  dialogDescription="Backend sẽ kiểm tra điều kiện và xử lý toàn bộ nghiệp vụ liên quan, kể cả đồng bộ ngược trạng thái đơn hàng ở Order Service qua Kafka. Hành động này không thể hoàn tác."
+                  dialogDescription="Hành động này không thể hoàn tác."
                   disabled={updateStatus.isPending}
                   onConfirm={() => updateStatus.mutate(advanceTo)}
                 />
@@ -82,7 +82,7 @@ export default function AdminShipmentDetailPage() {
                     tone="caution"
                     label={SHIPMENT_STATUS_ACTION_LABEL[exceptionTo] ?? SHIPMENT_STATUS_LABEL[exceptionTo]}
                     dialogTitle={`${SHIPMENT_STATUS_ACTION_LABEL[exceptionTo] ?? SHIPMENT_STATUS_LABEL[exceptionTo]}?`}
-                    dialogDescription="Backend sẽ kiểm tra điều kiện và xử lý toàn bộ nghiệp vụ liên quan, kể cả đồng bộ ngược trạng thái đơn hàng ở Order Service qua Kafka. Hành động này không thể hoàn tác."
+                    dialogDescription="Hành động này không thể hoàn tác."
                     disabled={updateStatus.isPending}
                     onConfirm={() => updateStatus.mutate(exceptionTo)}
                   />
@@ -90,10 +90,6 @@ export default function AdminShipmentDetailPage() {
               </>
             )}
           </div>
-          <p className="w-full text-xs text-muted-foreground">
-            Lưu ý: cập nhật trạng thái vận đơn sẽ tự động đồng bộ trạng thái đơn hàng tương ứng ở Order Service qua Kafka —
-            "Đã lấy hàng" đẩy đơn sang "Đang giao hàng", "Đã giao hàng" đẩy đơn sang "Hoàn tất" để khách hàng theo dõi.
-          </p>
         </CardContent>
       </Card>
 

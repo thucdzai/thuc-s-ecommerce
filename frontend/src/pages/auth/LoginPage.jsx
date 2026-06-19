@@ -54,7 +54,12 @@ export default function LoginPage() {
           <Input id="email" name="email" type="email" required value={form.email} onChange={handleChange} placeholder="ban@email.com" />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="password">Mật khẩu</Label>
+          <div className="flex items-center justify-between">
+            <Label htmlFor="password">Mật khẩu</Label>
+            <Link to="/forgot-password" className="text-xs text-muted-foreground underline underline-offset-4">
+              Quên mật khẩu?
+            </Link>
+          </div>
           <Input id="password" name="password" type="password" required value={form.password} onChange={handleChange} />
         </div>
         {error && <p className="text-sm text-destructive">{error}</p>}

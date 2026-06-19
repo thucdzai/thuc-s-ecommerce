@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
-import { ArrowRight, Package, Percent, Receipt, ShoppingBag, Truck } from 'lucide-react';
+import { ArrowRight, Package, Percent, Receipt, ShoppingBag, Truck, Users } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { LoadingState } from '@/components/common/States';
-import { ordersApi, paymentsApi, productsApi, shippingApi } from '@/api';
+import { ordersApi, paymentsApi, productsApi, shippingApi, usersApi } from '@/api';
 
 // Dashboard chỉ tổng hợp lại các con số `pagination.totalItems` mà từng service đã tính sẵn —
 // không cộng dồn / suy luận thêm bất kỳ số liệu nghiệp vụ nào ở phía client.
@@ -39,6 +39,7 @@ const quickLinks = [
   { to: '/admin/promotions', label: 'Quản lý khuyến mãi', icon: Percent, desc: 'Tạo và quản lý mã giảm giá' },
   { to: '/admin/payments', label: 'Đối soát thanh toán', icon: Receipt, desc: 'Theo dõi giao dịch VNPay' },
   { to: '/admin/shipments', label: 'Quản lý vận chuyển', icon: Truck, desc: 'Theo dõi và cập nhật trạng thái vận đơn' },
+  { to: '/admin/users', label: 'Quản lý người dùng', icon: Users, desc: 'Xem danh sách và khóa/mở khóa tài khoản' },
 ];
 
 export default function DashboardPage() {
@@ -46,8 +47,9 @@ export default function DashboardPage() {
   const products = useCount(['admin-products-count'], () => productsApi.list({ page: 1, limit: 1 }));
   const payments = useCount(['admin-payments-count'], () => paymentsApi.adminList({ page: 1, limit: 1 }));
   const shipments = useCount(['admin-shipments-count'], () => shippingApi.adminList({ page: 1, limit: 1 }));
+  const users = useCount(['admin-users-count'], () => usersApi.adminList({ page: 1, limit: 1 }));
 
-  const isLoading = orders.isLoading || products.isLoading || payments.isLoading || shipments.isLoading;
+  const isLoading = orders.isLoading || products.isLoading || payments.isLoading || shipments.isLoading || users.isLoading;
   if (isLoading) return <LoadingState />;
 
   return (
@@ -56,11 +58,12 @@ export default function DashboardPage() {
         <h1 className="text-2xl font-semibold">Tổng quan</h1>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard icon={ShoppingBag} label="Tổng số đơn hàng" value={orders.data} to="/admin/orders" />
-        <StatCard icon={Package} label="Tổng số sản phẩm" value={products.data} to="/admin/products" />
-        <StatCard icon={Receipt} label="Giao dịch thanh toán" value={payments.data} to="/admin/payments" />
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        <StatCard icon={ShoppingBag} label="Đơn hàng" value={orders.data} to="/admin/orders" />
+        <StatCard icon={Package} label="Sản phẩm" value={products.data} to="/admin/products" />
+        <StatCard icon={Receipt} label="Giao dịch" value={payments.data} to="/admin/payments" />
         <StatCard icon={Truck} label="Vận đơn" value={shipments.data} to="/admin/shipments" />
+        <StatCard icon={Users} label="Người dùng" value={users.data} to="/admin/users" />
       </div>
 
       <div>

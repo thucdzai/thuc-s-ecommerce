@@ -24,4 +24,14 @@ const logout = asyncHandler(async (req, res) => {
     return ok(res, null, 'Đăng xuất thành công');
 });
 
-module.exports = { register, login, refreshToken, logout };
+const forgotPassword = asyncHandler(async (req, res) => {
+    await authService.forgotPassword(req.body);
+    return ok(res, null, 'Nếu email tồn tại, chúng tôi đã gửi link đặt lại mật khẩu');
+});
+
+const resetPassword = asyncHandler(async (req, res) => {
+    await authService.resetPassword(req.body);
+    return ok(res, null, 'Đặt lại mật khẩu thành công, vui lòng đăng nhập lại');
+});
+
+module.exports = { register, login, refreshToken, logout, forgotPassword, resetPassword };

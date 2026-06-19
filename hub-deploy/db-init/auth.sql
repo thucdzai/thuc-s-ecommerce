@@ -63,20 +63,6 @@ CREATE TABLE IF NOT EXISTS addresses (
 );
 
 -- ---------------------------------------------------------------------
--- password_reset_tokens: token đặt lại mật khẩu (lưu hash, hết hạn sau 15 phút)
--- ---------------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS password_reset_tokens (
-    id          INT AUTO_INCREMENT PRIMARY KEY,
-    user_id     INT NOT NULL,
-    token_hash  VARCHAR(255) NOT NULL UNIQUE,
-    expires_at  TIMESTAMP NOT NULL,
-    used_at     TIMESTAMP NULL DEFAULT NULL,
-    created_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_prt_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    INDEX idx_prt_token (token_hash)
-);
-
--- ---------------------------------------------------------------------
 -- refresh_tokens: lưu phiên đăng nhập an toàn (lưu hash, không lưu token thô)
 -- ---------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS refresh_tokens (

@@ -7,15 +7,23 @@ const notificationService = require('../notifications/notification.service');
 async function handle(envelope) {
     const { eventType, data } = envelope;
 
-    if (eventType !== 'user.registered') {
+    if (eventType === 'user.registered') {
+        console.log(`[Notification] Nhận sự kiện '${eventType}' — gửi email chào mừng tới "${data.email}"`);
+        await notificationService.sendToContact(
+            { email: data.email },
+            templates.welcome({ fullName: data.fullName })
+        );
         return;
     }
 
-    console.log(`[Notification] Nhận sự kiện '${eventType}' — chuẩn bị gửi email chào mừng tới "${data.email}"`);
-    await notificationService.sendToContact(
-        { email: data.email },
-        templates.welcome({ fullName: data.fullName })
-    );
+    if (eventType === 'user.password_reset_requested') {
+        console.log(`[Notification] Nhận sự kiện '${eventType}' — gửi email đặt lại mật khẩu tới "${data.email}"`);
+        await notificationService.sendToContact(
+            { email: data.email },
+            templates.passwordReset({ fullName: data.fullName, resetUrl: data.resetUrl })
+        );
+        return;
+    }
 }
 
 module.exports = { handle };

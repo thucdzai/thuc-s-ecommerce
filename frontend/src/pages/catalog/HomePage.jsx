@@ -31,10 +31,8 @@ export default function HomePage() {
     <div className="space-y-10">
       <section className="rounded-2xl border bg-gradient-to-br from-primary/10 via-background to-background p-8 sm:p-12">
         <div className="max-w-2xl space-y-4">
-          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Mua sắm thông minh, giao nhanh tận tay</h1>
-          <p className="text-muted-foreground">
-            Khám phá hàng ngàn sản phẩm chất lượng với mức giá tốt nhất — từ TTTN Shop, dự án thương mại điện tử microservices.
-          </p>
+          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">TTTN Shop</h1>
+          <p className="text-muted-foreground">Chọn sản phẩm, đặt hàng, theo dõi vận chuyển — tất cả trong một nơi.</p>
           <Button size="lg" asChild>
             <Link to="/products">
               Khám phá ngay <ArrowRight className="ml-2 h-4 w-4" />

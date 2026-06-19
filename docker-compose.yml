@@ -69,6 +69,7 @@ services:
     build:
       context: ./auth-service
     container_name: tttn_auth_service
+    restart: on-failure
     ports:
       - "3002:3001"
     volumes:
@@ -122,6 +123,7 @@ services:
     build:
       context: ./product-service
     container_name: tttn_product_service
+    restart: on-failure
     ports:
       - "3003:3001"
     environment:
@@ -171,6 +173,7 @@ services:
     build:
       context: ./warehouse-service
     container_name: tttn_warehouse_service
+    restart: on-failure
     ports:
       - "3004:3001"
     environment:
@@ -214,6 +217,7 @@ services:
     build:
       context: ./cart-service
     container_name: tttn_cart_service
+    restart: on-failure
     ports:
       - "3005:3001"
     environment:
@@ -257,6 +261,7 @@ services:
     build:
       context: ./order-service
     container_name: tttn_order_service
+    restart: on-failure
     ports:
       - "3006:3001"
     environment:
@@ -305,6 +310,7 @@ services:
     build:
       context: ./payment-service
     container_name: tttn_payment_service
+    restart: on-failure
     ports:
       - "3007:3001"
     environment:
@@ -346,6 +352,7 @@ services:
     build:
       context: ./mock-vnpay-service
     container_name: tttn_mock_vnpay
+    restart: on-failure
     ports:
       - "3009:3001"
     environment:
@@ -379,6 +386,7 @@ services:
     build:
       context: ./shipping-service
     container_name: tttn_shipping_service
+    restart: on-failure
     ports:
       - "3008:3001"
     environment:
@@ -414,6 +422,7 @@ services:
     build:
       context: ./notification-service
     container_name: tttn_notification_service
+    restart: on-failure
     environment:
       - JWT_ACCESS_SECRET=change_me_access_secret
       - KAFKA_BROKERS=kafka:9092
@@ -434,6 +443,7 @@ services:
     build:
       context: ./frontend
     container_name: tttn_frontend
+    restart: on-failure
     ports:
       - "3000:80"
     depends_on:
