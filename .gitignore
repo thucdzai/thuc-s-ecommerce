@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+admin.txt
+
+build-push-mysql.ps1
+
+push-to-dockerhub.ps1
+test-payment-flow.sh
+# Build output
+**/dist/
+**/build/
+
+# Environment files - KHÔNG commit secrets
+.env
+.env.local
+.env.*.local
+**/.env
+**/.env.local
+
+# Logs
+*.log
+npm-debug.log*
+logs/
+**/logs/
+
+# Docker volumes / data
+**/uploads/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE & Tools
+.vscode/settings.json
+.idea/
+.claude/
+
+# Test coverage
+coverage/
+**/coverage/
